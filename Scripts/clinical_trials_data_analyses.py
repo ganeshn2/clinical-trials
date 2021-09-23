@@ -3,9 +3,9 @@ import pandas as pd
 
 ct = ClinicalTrials()
 
-# importing continent data from
+# importing country to continent data
 country_continent = pd.read_csv("clinical-trials/Input/country-and-continent-codes-list.csv")
-print(country_continent.head(1000))
+
 
 def fetch_country(ctr):
     country = ctr.split("|")
@@ -125,8 +125,8 @@ def wound_foams():
 if __name__ == "__main__":
     frames = [skhealing_diabetes(),skin_hydrogel(),wound_heal_hydrogel(),wound_hydrogel(),skin_fibers(),
                           wound_heal_fibers(),skin_heal_gels(),wound_heal_gels(),skin_foams(),wound_foams()]
-    merged_df = pd.concat(frames)
-    merged_df["Country_Name"] = merged_df["LocationCountry"].apply(lambda x : fetch_country(x))
-    # print(merged_df)
-
+    clinical_trials_data_df = pd.concat(frames)
+    clinical_trials_data_df["Country_Name"] = clinical_trials_data_df["LocationCountry"].apply(lambda x : fetch_country(x))
+    # merged_df = clinical_trials_data_df.merge(country_continent, how="inner", on="Country_Name")
+    clinical_trials_data_df.to_csv("~/playground/clinical-trials/Output/clinical_trials_data.csv")
     print('success')
