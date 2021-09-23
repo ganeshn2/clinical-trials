@@ -6,7 +6,6 @@ ct = ClinicalTrials()
 # importing country to continent data
 country_continent = pd.read_csv("clinical-trials/Input/country-and-continent-codes-list.csv")
 
-
 def fetch_country(ctr):
     country = ctr.split("|")
     country_name = country[0]
@@ -126,7 +125,11 @@ if __name__ == "__main__":
     frames = [skhealing_diabetes(),skin_hydrogel(),wound_heal_hydrogel(),wound_hydrogel(),skin_fibers(),
                           wound_heal_fibers(),skin_heal_gels(),wound_heal_gels(),skin_foams(),wound_foams()]
     clinical_trials_data_df = pd.concat(frames)
+    clinical_trials_data_df.drop_duplicates(keep=False, inplace=True)
     clinical_trials_data_df["Country_Name"] = clinical_trials_data_df["LocationCountry"].apply(lambda x : fetch_country(x))
-    # merged_df = clinical_trials_data_df.merge(country_continent, how="inner", on="Country_Name")
-    clinical_trials_data_df.to_csv("~/playground/clinical-trials/Output/clinical_trials_data.csv")
+    clinical_trials_data_df = clinical_trials_data_df.drop(["LocationCountry"],axis=1)
+    merged_df = clinical_trials_data_df.merge(country_continent, how="inner", on="Country_Name").drop(
+        ["Three_Letter_Country_Code","Country_Number"], axis = 1)
+    merged_df.to_csv("~/playground/clinical-trials/Output/merged_df.csv")
+    print(merged_df["InterventionType"].value_counts())
     print('success')
