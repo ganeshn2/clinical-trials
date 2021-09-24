@@ -15,6 +15,8 @@ plt.pie(slices, labels = labels,explode = explode,
         colors = colors,
         wedgeprops = {"edgecolor":"black"})
 plt.title("Clinical Trials on Skin Regeneration Across the World",fontsize = 15)
+plt.legend(labels = labels, bbox_to_anchor=(1,0), loc="lower right",
+                          bbox_transform=plt.gcf().transFigure)
 plt.tight_layout()
 plt.savefig("Pie Chart without Shadow.jpg")
 plt.show()
