@@ -131,8 +131,8 @@ if __name__ == "__main__":
     clinical_trials_data_df = clinical_trials_data_df.drop(["LocationCountry","Rank"],axis=1)
     clinical_trials_data_df.drop_duplicates(keep=False, inplace=True)
 
-    merged_df = clinical_trials_data_df.merge(country_continent, how="inner", on="Country_Name").drop(
-        ["Three_Letter_Country_Code","Country_Number","Two_Letter_Country_Code"], axis = 1)
+    #merged_df = clinical_trials_data_df.merge(country_continent, how="inner", on="Country_Name").drop(
+       # ["Three_Letter_Country_Code","Country_Number","Two_Letter_Country_Code"], axis = 1)
 
     merged_df.to_csv("~/playground/clinical-trials/Output/merged_df.csv")
     print(merged_df["InterventionType"].value_counts())
