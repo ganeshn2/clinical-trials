@@ -7,7 +7,7 @@ ct = ClinicalTrials()
 # importing country to continent data
 country_continent_df = pd.read_csv("clinical-trials/Input/country-and-continent-codes-list.csv")
 country_continent_df = country_continent_df.drop(
-        ["Three_Letter_Country_Code","Country_Number","Two_Letter_Country_Code"], axis = 1)
+        ["Three_Letter_Country_Code","Country_Number","Two_Letter_Country_Code"],axis = 1)
 
 def impute_pipe(ctr):
     string_split = ctr.split("|")
@@ -33,7 +33,7 @@ def search_criteria (search_string):
     fields=["NCTId", "Condition", "BriefTitle", "InterventionType", "LocationCountry", "StartDate",
                 "CompletionDate"],
     max_studies = 1000,
-    fmt = 'csv' )
+    fmt = 'csv')
     ct.get_study_count(search_expr = search_string)
     return pd.DataFrame.from_records(study_list[1:], columns=study_list[0])
 
@@ -52,7 +52,7 @@ def create_dataframe():
     clinical_trials_data_df = pd.concat(frames)
     clinical_trials_data_df["Country_Name"] = clinical_trials_data_df["LocationCountry"].apply(lambda x: impute_pipe(x))
     clinical_trials_data_df["InterventionType"] = clinical_trials_data_df["InterventionType"].apply(lambda x: impute_pipe(x))
-    clinical_trials_data_df.to_csv("~/playground/clinical-trials/Output/clinical_trials_data_df.csv")
+    clinical_trials_data_df.to_csv("./clinical-trials/Output/clinical_trials_data_df.csv")
     return clinical_trials_data_df
 
 
@@ -60,13 +60,17 @@ def merge_clean_dataframe (df1, df2):
     df1 = df1.drop(["LocationCountry", "Rank"], axis=1)
     df1.drop_duplicates(keep=False, inplace=True)
     merged_df = df1.merge(df2, how="inner", on="Country_Name")
-    intervention_df = df1[(df1["InterventionType"] == "Device") |
-                          (df1["InterventionType"] == "Drug") | (df1["InterventionType"] == "Other") |
-                          (df1["InterventionType"] == "Procedure") | (df1["InterventionType"] == "Biological")]
-    df2 = df2.to_csv("./clinical-trials/Output/df2.csv")
     merged_df.to_csv("./clinical-trials/Output/merged_df.csv")
+    return merged_df
+
+
+def interventionDF(df3):
+    intervention_df = df3[(df3["InterventionType"] == "Device") |
+                          (df3["InterventionType"] == "Drug") | (df3["InterventionType"] == "Other") |
+                          (df3["InterventionType"] == "Procedure") | (df3["InterventionType"] == "Biological")]
     intervention_df.to_csv("./clinical-trials/Output/intervention_df.csv")
-    return df2, intervention_df, merged_df
+    return intervention_df
+
 
 # Code for matplotlib pie plots
 colors_1 = ["#008fd5","#fc4f30","#e5ae37","#6d904f","#D02090","#308014"]
@@ -83,9 +87,7 @@ def pie_chart(slices,labels, colors, explode,title):
             startangle=-15, autopct="%1.0f%%",
             colors=colors,
             wedgeprops={"edgecolor": "black"})
-    plt.title(title, fontsize=15)
-    plt.legend(labels=labels, bbox_to_anchor=(1, 0), loc="lower right",
-               bbox_transform=plt.gcf().transFigure)
+    plt.title(title, fontsize=18)
     plt.tight_layout()
     plt.savefig(title+".jpg")
     plt.show()
@@ -94,7 +96,8 @@ def pie_chart(slices,labels, colors, explode,title):
 if __name__ == "__main__":
     main_df = create_dataframe()
     merged_df = merge_clean_dataframe(main_df,country_continent_df)
-    print(merged_df[2].head(10))
-    pie_chart(merged_df[2]["Continent_Name"].value_counts(),labels_1,colors_1,explode_1,"Skin Regeneration Clinical Trials Across the World")
-    # pie_chart(merged_df["InterventionType"].value_counts(), labels_1, colors_1, explode_1,
-    #           "Skin Regeneration Clinical Trials Across the World")
+    piechart_plot2_df = interventionDF(merged_df)
+    pie_chart(merged_df["Continent_Name"].value_counts(),labels_1,colors_1,explode_1,
+              "Skin Regeneration Clinical Trials Across the World")
+    pie_chart(piechart_plot2_df["InterventionType"].value_counts(), labels_2, colors_2, explode_2,
+              "Type of Skin Regeneration Clinical Trials")
