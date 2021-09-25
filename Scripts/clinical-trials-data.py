@@ -52,49 +52,49 @@ def create_dataframe():
     clinical_trials_data_df = pd.concat(frames)
     clinical_trials_data_df["Country_Name"] = clinical_trials_data_df["LocationCountry"].apply(lambda x: impute_pipe(x))
     clinical_trials_data_df["InterventionType"] = clinical_trials_data_df["InterventionType"].apply(lambda x: impute_pipe(x))
-    clinical_trials_data_df = clinical_trials_data_df.to_csv("~/playground/clinical-trials/Output/clinical_trials_data_df.csv")
+    clinical_trials_data_df.to_csv("~/playground/clinical-trials/Output/clinical_trials_data_df.csv")
     return clinical_trials_data_df
 
 
-#def merge_clean_dataframe (df1, df2):
-    #df1 = df1.drop(["LocationCountry", "Rank"], axis=1)
-    #df1.drop_duplicates(keep=False, inplace=True)
-    #merged_df = df1.merge(df2, how="inner", on="Country_Name")
-    #intervention_df = df1[(df1["InterventionType"] == "Device") |
-    #(df1["InterventionType"] == "Drug") | (df1["InterventionType"] == "Other") |
-    #(df1["InterventionType"] == "Procedure") | (df1["InterventionType"] == "Biological")]
-    #df2 = df2.to_csv("/clinical-trials/Output/df2.csv")
-    #merged_df.to_csv("/clinical-trials/Output/merged_df.csv")
-    #intervention_df.to_csv("/clinical-trials/Output/intervention_df.csv")
-    #return df2, intervention_df, merged_df
+def merge_clean_dataframe (df1, df2):
+    df1 = df1.drop(["LocationCountry", "Rank"], axis=1)
+    df1.drop_duplicates(keep=False, inplace=True)
+    merged_df = df1.merge(df2, how="inner", on="Country_Name")
+    intervention_df = df1[(df1["InterventionType"] == "Device") |
+                          (df1["InterventionType"] == "Drug") | (df1["InterventionType"] == "Other") |
+                          (df1["InterventionType"] == "Procedure") | (df1["InterventionType"] == "Biological")]
+    df2 = df2.to_csv("./clinical-trials/Output/df2.csv")
+    merged_df.to_csv("./clinical-trials/Output/merged_df.csv")
+    intervention_df.to_csv("./clinical-trials/Output/intervention_df.csv")
+    return df2, intervention_df, merged_df
 
 # Code for matplotlib pie plots
-#colors_1 = ["#008fd5","#fc4f30","#e5ae37","#6d904f","#D02090","#308014"]
-#colors_2 = ["#008fd5","#fc4f30","#e5ae37","#6d904f","#D02090"]
-#labels_1 = ['North America',"Europe","Asia","South America","Africa","Oceania"]
-#labels_2 = ['Device',"Drug","Other","Procedure","Biological"]
-#explode_1 = [0.1, 0, 0, 0, 0.2, 0]
-#explode_2 = [0.1, 0, 0, 0, 0.1]
+colors_1 = ["#008fd5","#fc4f30","#e5ae37","#6d904f","#D02090","#308014"]
+colors_2 = ["#008fd5","#fc4f30","#e5ae37","#6d904f","#D02090"]
+labels_1 = ['North America',"Europe","Asia","South America","Africa","Oceania"]
+labels_2 = ['Device',"Drug","Other","Procedure","Biological"]
+explode_1 = [0.1, 0, 0, 0, 0.2, 0]
+explode_2 = [0.1, 0, 0, 0, 0.1]
 
-#def pie_chart (df3,labels, colors, explode,title):
-    #plt.style.use("fivethirtyeight")
-    #plt.pie(slices, labels=labels, explode=explode,
-            #startangle=-15, autopct="%1.0f%%",
-            #colors=colors,
-            #wedgeprops={"edgecolor": "black"})
-    #plt.title(title, fontsize=15)
-    #plt.legend(labels=labels, bbox_to_anchor=(1, 0), loc="lower right",
-               #bbox_transform=plt.gcf().transFigure)
-    #plt.tight_layout()
-    #plt.savefig(title.jpg)
-    #plt.show()
 
-print(clinical_trials_data_df.head())
+def pie_chart(slices,labels, colors, explode,title):
+    plt.style.use("fivethirtyeight")
+    plt.pie(slices, labels=labels, explode=explode,
+            startangle=-15, autopct="%1.0f%%",
+            colors=colors,
+            wedgeprops={"edgecolor": "black"})
+    plt.title(title, fontsize=15)
+    plt.legend(labels=labels, bbox_to_anchor=(1, 0), loc="lower right",
+               bbox_transform=plt.gcf().transFigure)
+    plt.tight_layout()
+    plt.savefig(title+".jpg")
+    plt.show()
 
-#if __name__ == "__main__":
-    #create_dataframe()
-    #merge_clean_dataframe (clinical_trials_data_df,country_continent_df)
-    #pie_chart(merge_df["Continent_Name"].value_counts(),labels_1,colors_1,explode_1,
-    #"Skin Regeneration Clinical Trials Across the World")
-    #pie_chart(merge_df["InterventionType"].value_counts(), labels_1, colors_1, explode_1,
-         #     "Skin Regeneration Clinical Trials Across the World")
+
+if __name__ == "__main__":
+    main_df = create_dataframe()
+    merged_df = merge_clean_dataframe(main_df,country_continent_df)
+    print(merged_df[2].head(10))
+    pie_chart(merged_df[2]["Continent_Name"].value_counts(),labels_1,colors_1,explode_1,"Skin Regeneration Clinical Trials Across the World")
+    # pie_chart(merged_df["InterventionType"].value_counts(), labels_1, colors_1, explode_1,
+    #           "Skin Regeneration Clinical Trials Across the World")
