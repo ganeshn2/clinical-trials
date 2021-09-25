@@ -1,1 +1,26 @@
-The main purpose of this repository is to demonstrate the utility of clinical trials API for accessing specific clinical trials information. 
+Author of this program: Ganesh Narayanan, Ph.D.
+Co-authors of the manuscript: Deepa Garg, Ph.D., Gurvinder Kaur,Ph.D., and Ishita Matai, Ph.D.
+
+Title of this program: Clinical Trials Currently Being Carried Out For Skin Regeneration
+
+The main purpose of this repository is to demonstrate the utility of clinical trials API for accessing specific clinical trials information.
+
+In the first step, pertaining to this research, several search terms involving skin regeneration was invoked and saved as dataframe.
+
+Key useful information such as Title, Location, start and end dates were captured in this dataframe. Subsequently, all the dataframes were
+merged by row. And any duplicates were removed, resulting in a dataframe containing about 744 studies. (clinical_trials_data_df)
+
+csv containing country-continent  information was ingested forming a dataframe (country-continent) and merged with
+(clinical_trials_data_df) dataframe via inner join forming a new dataframe called merged_df
+
+for plotting pie chart containing legend, colors, title, a new function called pie_chart() was created. For one of the pie-chart
+interventionType_Plot,since the number of variables were more than 10, only top-6 variables were chosen by
+slicing merged_df dataframe into a new dataframe called split_df.
+
+By running this code, two pie charts are created with appropriate legends, and titles, optimized for visual attraction.
+
+Note: Please note the intention of this program is to act as repository and supplementary information for upcoming peer-reviewed
+manuscript titled " Advanced Biomaterials-based Strategies for Wound Healing" intended to be
+published in Biomacromolecules Journal.
+Biomacromolecules website: https://pubs.acs.org/journal/bomaf6
+
